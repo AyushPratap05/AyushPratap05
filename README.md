@@ -51,10 +51,10 @@ const ayush = {
   techStack: {
     languages:    ["Python", "JavaScript", "SQL", "Kotlin", "HTML", "CSS"],
     frontend:     ["ReactJS", "Jetpack Compose", "Tailwind CSS"],
-    backend:      ["FastAPI", "REST APIs", "Node.js"],
+    backend:      ["FastAPI", "REST APIs"],
     data:         ["Pandas", "NumPy", "Power BI", "Tableau", "Excel"],
     ml:           ["Scikit-learn", "Matplotlib", "Seaborn", "EDA"],
-    database:     ["MySQL", "Firebase", "MongoDB"],
+    database:     ["MySQL", "Firebase"],
     tools:        ["Git", "GitHub", "Android Studio", "VS Code"]
   },
   
