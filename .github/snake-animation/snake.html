@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { 
+    background: #0D1117; 
+    overflow: hidden;
+    width: 800px;
+    height: 200px;
+  }
+  
+  canvas { 
+    display: block;
+    background: #0D1117;
+  }
+</style>
+</head>
+<body>
+<canvas id="snake" width="800" height="200"></canvas>
+
+<script>
+const canvas = document.getElementById('snake');
+const ctx = canvas.getContext('2d');
+
+// Snake properties
+const CELL = 20;
+const COLS = canvas.width / CELL;
+const ROWS = canvas.height / CELL;
+
+let snake = [
+  {x: 5, y: 5},
+  {x: 4, y: 5},
+  {x: 3, y: 5},
+  {x: 2, y: 5},
+  {x: 1, y: 5},
+];
+
+let direction = {x: 1, y: 0}; // moving right
+let food = {x: 15, y: 5};
+let score = 0;
+let frame = 0;
+let glowIntensity = 0;
+let glowDir = 1;
+let trail = [];
+
+// Color palette
+const COLORS = {
+  snakeHead: '#39d353',
+  snakeBody: '#26a641',
+  snakeTail: '#0e4429',
+  food: '#FF6B6B',
+  glow: 'rgba(57, 211, 83, 0.3)',
+  bg: '#0D1117',
+  grid: 'rgba(255,255,255,0.02)'
+};
+
+function spawnFood() {
+  food = {
+    x: Math.floor(Math.random() * COLS),
+    y: Math.floor(Math.random() * ROWS)
+  };
+}
+
+function drawGrid() {
+  ctx.strokeStyle = COLORS.grid;
+  ctx.lineWidth = 0.5;
+  for(let x = 0; x <= canvas.width; x += CELL) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+    ctx.stroke();
+  }
+  for(let y = 0; y <= canvas.height; y += CELL) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    ctx.stroke();
+  }
+}
+
+function drawSnakeSegment(x, y, index, total) {
+  const px = x * CELL;
+  const py = y * CELL;
+  const size = CELL - 2;
+  
+  // Color gradient from head to tail
+  const ratio = index / total;
+  const r = Math.floor(57 * (1 - ratio) + 14 * ratio);
+  const g = Math.floor(211 * (1 - ratio) + 68 * ratio);
+  const b = Math.floor(83 * (1 - ratio) + 41 * ratio);
+  
+  ctx.shadowColor = `rgb(${r}, ${g}, ${b})`;
+  ctx.shadowBlur = index === 0 ? 20 : 10;
+  
+  // Draw rounded rectangle
+  const radius = index === 0 ? 8 : 5;
+  ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+  ctx.beginPath();
+  ctx.roundRect(px + 1, py + 1, size, size, radius);
+  ctx.fill();
+  
+  // Draw eyes on head
+  if(index === 0) {
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#0D1117';
+    
+    // Eye positions based on direction
+    let eye1, eye2;
+    if(direction.x === 1) { // right
+      eye1 = {x: px + size - 4, y: py + 5};
+      eye2 = {x: px + size - 4, y: py + 12};
+    } else if(direction.x === -1) { // left
+      eye1 = {x: px + 4, y: py + 5};
+      eye2 = {x: px + 4, y: py + 12};
+    } else if(direction.y === -1) { // up
+      eye1 = {x: px + 5, y: py + 4};
+      eye2 = {x: px + 12, y: py + 4};
+    } else { // down
+      eye1 = {x: px + 5, y: py + size - 4};
+      eye2 = {x: px + 12, y: py + size - 4};
+    }
+    
+    ctx.beginPath();
+    ctx.arc(eye1.x, eye1.y, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.arc(eye2.x, eye2.y, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Pupil glow
+    ctx.fillStyle = '#00FF41';
+    ctx.beginPath();
+    ctx.arc(eye1.x, eye1.y, 1, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(eye2.x, eye2.y, 1, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawFood() {
+  const px = food.x * CELL + CELL/2;
+  const py = food.y * CELL + CELL/2;
+  
+  // Pulsing glow effect
+  glowIntensity += 0.05 * glowDir;
+  if(glowIntensity >= 1 || glowIntensity <= 0) glowDir *= -1;
+  
+  ctx.shadowColor = '#FF6B6B';
+  ctx.shadowBlur = 10 + glowIntensity * 15;
+  ctx.fillStyle = '#FF6B6B';
+  
+  ctx.beginPath();
+  ctx.arc(px, py, 7, 0, Math.PI * 2);
+  ctx.fill();
+  
+  // Inner bright dot
+  ctx.shadowBlur = 5;
+  ctx.fillStyle = '#FFB3B3';
+  ctx.beginPath();
+  ctx.arc(px - 2, py - 2, 3, 0, Math.PI * 2);
+  ctx.fill();
+  
+  ctx.shadowBlur = 0;
+}
+
+function drawTrail() {
+  trail.forEach((t, i) => {
+    const alpha = t.life / 20;
+    ctx.fillStyle = `rgba(57, 211, 83, ${alpha * 0.3})`;
+    ctx.shadowColor = 'rgba(57, 211, 83, 0.5)';
+    ctx.shadowBlur = 5;
+    const size = CELL * alpha;
+    ctx.fillRect(
+      t.x * CELL + (CELL - size)/2,
+      t.y * CELL + (CELL - size)/2,
+      size, size
+    );
+    t.life--;
+  });
+  trail = trail.filter(t => t.life > 0);
+}
+
+function drawScore() {
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = 'rgba(57, 211, 83, 0.7)';
+  ctx.font = '12px "Courier New", monospace';
+  ctx.fillText(`SCORE: ${score}`, 10, 20);
+  
+  ctx.fillStyle = 'rgba(57, 211, 83, 0.4)';
+  ctx.fillText('[ AYUSH.DEV ]', canvas.width - 100, 20);
+}
+
+function moveSnake() {
+  const head = {
+    x: snake[0].x + direction.x,
+    y: snake[0].y + direction.y
+  };
+  
+  // Wrap around walls (side to side movement!)
+  if(head.x >= COLS) head.x = 0;
+  if(head.x < 0) head.x = COLS - 1;
+  if(head.y >= ROWS) head.y = 0;
+  if(head.y < 0) head.y = ROWS - 1;
+  
+  // Add trail at old head position
+  trail.push({x: snake[0].x, y: snake[0].y, life: 15});
+  
+  snake.unshift(head);
+  
+  // Check food collision
+  if(head.x === food.x && head.y === food.y) {
+    score++;
+    spawnFood();
+    // Don't pop tail = snake grows
+  } else {
+    snake.pop();
+  }
+}
+
+// AI Direction logic - moves intelligently toward food
+function updateDirection() {
+  const head = snake[0];
+  const dx = food.x - head.x;
+  const dy = food.y - head.y;
+  
+  // Prefer horizontal movement (side to side effect)
+  if(Math.abs(dx) > Math.abs(dy)) {
+    if(dx > 0 && direction.x !== -1) {
+      direction = {x: 1, y: 0};
+    } else if(dx < 0 && direction.x !== 1) {
+      direction = {x: -1, y: 0};
+    }
+  } else {
+    if(dy > 0 && direction.y !== -1) {
+      direction = {x: 0, y: 1};
+    } else if(dy < 0 && direction.y !== 1) {
+      direction = {x: 0, y: -1};
+    }
+  }
+}
+
+function gameLoop() {
+  frame++;
+  
+  // Clear
+  ctx.fillStyle = COLORS.bg;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Draw grid
+  drawGrid();
+  
+  // Draw trail
+  drawTrail();
+  
+  // Move every 8 frames
+  if(frame % 8 === 0) {
+    updateDirection();
+    moveSnake();
+  }
+  
+  // Draw food
+  drawFood();
+  
+  // Draw snake
+  snake.forEach((seg, i) => {
+    drawSnakeSegment(seg.x, seg.y, i, snake.length);
+  });
+  
+  // Draw HUD
+  drawScore();
+  
+  requestAnimationFrame(gameLoop);
+}
+
+// Start
+spawnFood();
+gameLoop();
+</script>
+</body>
+</html>
