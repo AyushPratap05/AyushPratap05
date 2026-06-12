@@ -2,33 +2,41 @@
   <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=200&section=header&text=Ayush%20Pratap%20Singh&fontSize=50&fontColor=fff&animation=twinkling&fontAlignY=35&desc=Developer%20%7C%20Data%20Analyst%20%7C%20Problem%20Solver&descSize=18&descAlignY=55"/>
 </div>
 
+<!-- MATRIX RAIN EFFECT -->
 <div align="center">
-  <a href="https://git.io/typing-svg">
-    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1000&color=6AD3F7&center=true&vCenter=true&multiline=true&width=700&height=120&lines=Full+Stack+Developer+%F0%9F%9A%80;Android+Developer+(Kotlin+%26+Jetpack+Compose)+%F0%9F%93%B1;Data+Analyst+%7C+Power+BI+%7C+SQL+%F0%9F%93%8A;Machine+Learning+%7C+FastAPI+Explorer+%F0%9F%A4%96;IIT+Ropar+SDE+Intern+%E2%9C%85" alt="Typing SVG" />
-  </a>
-</div>
-
-<br/>
-
-<div align="center">
-  <a href="https://linkedin.com/in/ayush-pratap-singh-rajawat">
-    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/>
-  </a>
-  <a href="mailto:ayushrajawat2005@gmail.com">
-    <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white"/>
-  </a>
-  <a href="https://ayushpratap05.github.io/">
-    <img src="https://img.shields.io/badge/Portfolio-FF5722?style=for-the-badge&logo=google-chrome&logoColor=white"/>
-  </a>
-  <a href="https://github.com/AyushPratap05">
-    <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
-  </a>
-  <img src="https://komarev.com/ghpvc/?username=AyushPratap05&style=for-the-badge&color=blue" alt="Profile Views"/>
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1000&color=6AD3F7&center=true&vCenter=true&multiline=true&width=700&height=120&lines=Full+Stack+Developer+%F0%9F%9A%80;Android+Developer+(Kotlin+%26+Jetpack+Compose)+%F0%9F%93%B1;Data+Analyst+%7C+Power+BI+%7C+SQL+%F0%9F%93%8A;Machine+Learning+%7C+FastAPI+Explorer+%F0%9F%A4%96;IIT+Ropar+SDE+Intern+%E2%9C%85" alt="Typing SVG" />
 </div>
 
 ---
 
-## 🧠 About Me
+<!-- 🐍 SNAKE EATING CONTRIBUTIONS — THE STAR OF THE SHOW -->
+<div align="center">
+  <h2>🐍 Snake Eating My Contributions</h2>
+  
+  <!-- DARK MODE SNAKE -->
+  <picture>
+    <source 
+      media="(prefers-color-scheme: dark)" 
+      srcset="https://raw.githubusercontent.com/AyushPratap05/AyushPratap05/output/github-contribution-grid-snake-dark.svg"
+    />
+    <!-- LIGHT MODE SNAKE -->
+    <source 
+      media="(prefers-color-scheme: light)" 
+      srcset="https://raw.githubusercontent.com/AyushPratap05/AyushPratap05/output/github-contribution-grid-snake.svg"
+    />
+    <img 
+      alt="github contribution grid snake animation" 
+      src="https://raw.githubusercontent.com/AyushPratap05/AyushPratap05/output/github-contribution-grid-snake.svg"
+    />
+  </picture>
+</div>
+
+---
+
+<!-- MATRIX/TERMINAL STYLE ABOUT ME -->
+<div align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Matrix+Code+NFI&size=18&duration=2000&pause=500&color=00FF41&center=true&vCenter=true&width=600&lines=INITIALIZING+PROFILE...;LOADING+DEVELOPER+DATA...;ACCESS+GRANTED+✓" alt="Matrix Loading"/>
+</div>
 
 ```javascript
 const ayush = {
@@ -41,12 +49,7 @@ const ayush = {
     "Data Analyst Intern @ Innobyte Services (SQL, Power BI)"
   ],
   
-  currentlyLearning: [
-    "Machine Learning 🤖",
-    "FastAPI ⚡",
-    "System Design 🏗️",
-    "Advanced DSA 💡"
-  ],
+  currentlyLearning: ["Machine Learning 🤖","FastAPI ⚡","System Design 🏗️","Advanced DSA 💡"],
   
   techStack: {
     languages:    ["Python", "JavaScript", "SQL", "Kotlin", "HTML", "CSS"],
