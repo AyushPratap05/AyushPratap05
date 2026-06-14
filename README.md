@@ -92,7 +92,7 @@ data class Developer(
 
 <div align="center">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=120&section=footer"/>
-</div>r=8b949e"/>
+</div r=8b949e"/>
 </div>
 
 <!-- LIVE TYPING - Clean and developer focused -->
